@@ -1,0 +1,61 @@
+@import "reset.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+    --blue-main: #2C3E50;
+    --white-main: #FFFFFF;
+    --yellow-accent: #F1C40F;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    color: var(--blue-main);
+}
+
+.article {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    row-gap: 40px;
+}
+
+.title-xl {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.title-l {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.text {
+    padding-top: 20px;
+    line-height: 1.4;
+}
+
+.list {
+    padding-top: 20px;
+}
+
+.list-item {
+    list-style: inside disc;
+    line-height: 1.4;
+}
+
+.list-item + .list-item {
+    padding-top: 10px;
+}
+
+.analytics-data {
+    display: flex;
+    align-items: start;
+    column-gap: 50px;
+
+    padding-top: 40px;
+}
+
+.analytics + .analytics {
+    padding-top: 40px;
+}

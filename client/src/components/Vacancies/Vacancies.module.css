@@ -1,0 +1,68 @@
+.vacancies {
+    padding-top: 40px;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 40px;
+}
+
+.vacancy {
+    padding: 20px;
+
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 14px;
+
+    color: var(--blue-main);
+
+    transition: 0.3s border-color;
+}
+
+.vacancy:hover {
+    border-color: var(--blue-main);
+}
+
+.salary {
+    padding: 12px 0 20px;
+    font-weight: 500;
+}
+
+.description {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+}
+
+.skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    padding: 20px 0;
+}
+
+.skill {
+    padding: 6px 12px;
+    border-radius: 10px;
+
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #A6A6A6;
+    font-weight: 500;
+}
+
+.company {
+    padding-bottom: 20px;
+}
+
+.bottom {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+.divider {
+    width: 4px;
+    aspect-ratio: 1;
+    background-color: var(--blue-main);
+    border-radius: 50%;
+}

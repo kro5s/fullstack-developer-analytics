@@ -1,0 +1,23 @@
+.wrapper {
+    grid-area: footer;
+
+    padding: 25px;
+
+    background-color: var(--blue-main);
+    color: var(--white-main);
+}
+
+.divider {
+    width: 6px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: var(--white-main);
+}
+
+.author {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+
+    font-size: 16px;
+}

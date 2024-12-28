@@ -1,0 +1,52 @@
+.wrapper {
+    grid-area: sidebar;
+
+    padding: 20px 25px;
+
+    border-right: 1px solid #F3F3F3;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.button.hidden {
+    transform: rotate(180deg);
+}
+
+.upper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+
+    padding-top: 40px;
+}
+
+.link a {
+    position: relative;
+    color: var(--blue-main);
+}
+
+.link a.active::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+
+    position: absolute;
+    top: 50%;
+    left: -10px;
+
+    transform: translate(-50%, -50%);
+
+    background-color: var(--yellow-accent);
+}
