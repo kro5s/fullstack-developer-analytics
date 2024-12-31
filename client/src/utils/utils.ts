@@ -1,11 +1,11 @@
-export function transformNumberToCurrency(value: number) {
+export function transformNumberToCurrency(value: string | number) {
   const formatter = new Intl.NumberFormat("ru-RU", {
     style: "currency",
     currency: "RUB",
-    minimumFractionDigits: 0
+    minimumFractionDigits: 1
   })
 
-  return formatter.format(value).replace(/\s/g, ".").replace(/\.₽/, "₽");
+  return formatter.format(Number(value)).replace(/\s/g, ".").replace(/\.₽/, "₽");
 }
 
 export function prepareSalary(
@@ -23,4 +23,26 @@ export function prepareSalary(
   }
 
   return result.join(" ");
+}
+
+interface DataRow {
+  [key: string]: string | number;
+}
+
+export function prepareTableData(
+  headers: string[],
+  data: DataRow[],
+  changeValueFn: (e: string | number) => string = (e) => String(e)
+) {
+  const prepared = transformData(data);
+
+  return [headers, ...prepared.map(row => {
+    const copy = [...row];
+    copy[1] = changeValueFn(copy[1]);
+    return copy;
+  })]
+}
+
+export function transformData(data: DataRow[]) {
+  return data.map((row) => Object.values(row));
 }

@@ -1,8 +1,9 @@
 import AnalyticsTable from "../components/AnalyticsTable/AnalyticsTable.tsx";
 import AnalyticsLine from "../components/AnalyticsLine/AnalyticsLine.tsx";
-import {transformNumberToCurrency} from "../utils/utils.ts";
+import {prepareTableData, transformData, transformNumberToCurrency} from "../utils/utils.ts";
 import AnalyticsBar from "../components/AnalyticsBar/AnalyticsBar.tsx";
 import AnalyticsPie from "../components/AnalyticsPie/AnalyticsPie.tsx";
+import {useQuery} from "react-query";
 
 const mock1 = [
   ["Год", "Зарплата"],
@@ -89,46 +90,53 @@ const mock6 = [
 ];
 
 function CommonRoute() {
+  const {
+    isLoading,
+    isError,
+    data
+  } = useQuery({
+    queryKey: ["common"],
+    queryFn: async () => {
+      const response = await fetch("http://localhost:8000/api/common")
+
+      if (!response.ok) throw new Error();
+
+      return await response.json();
+    }
+  });
+
+
+  if (isLoading) return <div>Loading...</div>
+  console.log(data)
+
   return (
     <>
       <section className="analytics">
         <h2 className="title-xl">Динамика уровня зарплат по годам: Все профессии</h2>
         <div className="analytics-data">
-          <AnalyticsTable data={[mock1[0]].concat(mock1.slice(1).map(row => {
-            const copy = [...row];
-            copy[1] = transformNumberToCurrency(copy[1] as number);
-            return copy;
-          }))}/>
-          <AnalyticsLine data={mock1}/>
+          <AnalyticsTable data={prepareTableData(["Год", "Зарплата"], data["year_salary"], transformNumberToCurrency).slice(0, 11)}/>
+          <AnalyticsLine data={transformData(data["year_salary"])}/>
         </div>
       </section>
       <section className="analytics">
         <h2 className="title-xl">Динамика количества вакансий по годам: Все профессии</h2>
         <div className="analytics-data">
-          <AnalyticsTable data={mock2}/>
-          <AnalyticsLine data={mock2}/>
+          <AnalyticsTable data={prepareTableData(["Год", "Вакансии"], data["year_vacancies"]).slice(0, 11)}/>
+          <AnalyticsLine data={transformData(data["year_vacancies"])}/>
         </div>
       </section>
       <section className="analytics">
         <h2 className="title-xl">Уровень зарплат по городам: Все профессии</h2>
         <div className="analytics-data">
-          <AnalyticsTable data={[mock3[0]].concat(mock3.slice(1).map(row => {
-            const copy = [...row];
-            copy[1] = transformNumberToCurrency(copy[1] as number);
-            return copy;
-          }))}/>
-          <AnalyticsBar data={mock3}/>
+          <AnalyticsTable data={prepareTableData(["Город", "Зарплата"], data["city_salary"], transformNumberToCurrency).slice(0, 11)}/>
+          <AnalyticsBar data={transformData(data["city_salary"])}/>
         </div>
       </section>
       <section className="analytics">
         <h2 className="title-xl">Уровень зарплат по городам: Все профессии</h2>
         <div className="analytics-data">
-          <AnalyticsTable data={[mock4[0]].concat(mock4.slice(1).map(row => {
-            const copy = [...row];
-            copy[1] = `${copy[1]}%`
-            return copy;
-          }))}/>
-          <AnalyticsPie data={mock4}/>
+          <AnalyticsTable data={prepareTableData(["Город", "Доля вакансий"], data["city_vacancies_fraction"], e => `${e}%`).slice(0, 11)}/>
+          <AnalyticsPie data={transformData(data["city_vacancies_fraction"])}/>
         </div>
       </section>
       <section className="analytics">

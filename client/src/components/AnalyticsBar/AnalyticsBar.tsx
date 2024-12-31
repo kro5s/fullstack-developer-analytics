@@ -34,10 +34,10 @@ function AnalyticsBar({ data }: Props) {
   };
 
   const analyticsData = {
-    labels: data.slice(1).map(row => row[0]),
+    labels: data.map(row => row[0]),
     datasets: [
       {
-        data: data.slice(1).map(row => row[1]),
+        data: data.map(row => row[1]),
         backgroundColor: '#F1C40F',
       }
     ],

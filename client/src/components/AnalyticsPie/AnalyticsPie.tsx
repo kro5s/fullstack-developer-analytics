@@ -10,11 +10,11 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function AnalyticsPie({ data }: Props) {
   const analyticsData = {
-    labels: data.slice(1).map(row => row[0]),
+    labels: data.map(row => row[0]),
     datasets: [
       {
         label: '% всех вакансий',
-        data: data.slice(1).map(row => row[1]),
+        data: data.map(row => row[1]),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',

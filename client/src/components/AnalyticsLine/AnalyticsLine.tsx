@@ -27,10 +27,10 @@ function AnalyticsLine({data}: Props) {
   };
 
   const graphicData = {
-    labels: data.slice(1).reverse().map(row => row[0]),
+    labels: data.map(row => row[0]),
     datasets: [
       {
-        data: data.slice(1).reverse().map(row => row[1]),
+        data: data.map(row => row[1]),
         borderColor: '#2C3E50',
         backgroundColor: '#2C3E50',
       },
