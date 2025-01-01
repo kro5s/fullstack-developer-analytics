@@ -29,7 +29,7 @@ function AnalyticsBar({ data }: Props) {
     plugins: {
       legend: {
         display: false,
-      },
+      }
     },
   };
 
@@ -38,7 +38,7 @@ function AnalyticsBar({ data }: Props) {
     datasets: [
       {
         data: data.map(row => row[1]),
-        backgroundColor: '#F1C40F',
+        backgroundColor: '#fcbf49',
       }
     ],
   };

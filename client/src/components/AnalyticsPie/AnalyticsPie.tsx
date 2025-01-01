@@ -1,6 +1,7 @@
 import styles from "./AnalyticsPie.module.css";
 import {Pie} from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import chroma from "chroma-js";
 
 interface Props {
   data: (string | number)[][];
@@ -9,27 +10,20 @@ interface Props {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function AnalyticsPie({ data }: Props) {
+  const colorScale = chroma.scale('Set3').mode('lab').colors(data.length);
+  const values = data.map(row => row[1]);
+  const rest = 100 - values.reduce((acc: number, item) => acc + Number(item), 0);
+
   const analyticsData = {
-    labels: data.map(row => row[0]),
+    labels: [...data.map(row => row[0]), "Остальные города"],
     datasets: [
       {
         label: '% всех вакансий',
-        data: data.map(row => row[1]),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
+        data: [...values, rest],
+        backgroundColor: [...colorScale, "#dddddd"],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
+          ...colorScale.map(color => chroma(color).darken(0.5).hex()),
+          chroma("#dddddd").darken(0.5).hex()
         ],
         borderWidth: 1,
       },
@@ -38,7 +32,7 @@ function AnalyticsPie({ data }: Props) {
 
   return (
     <div className={styles.graphic}>
-      <Pie data={analyticsData} />
+      <Pie data={analyticsData} options={{responsive: true}}/>
     </div>
   );
 }

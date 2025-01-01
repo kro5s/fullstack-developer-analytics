@@ -1,11 +1,18 @@
+import {ISkillsStatistics} from "../types/types.ts";
+
 export function transformNumberToCurrency(value: string | number) {
+  if (typeof value === "string") value = 0;
+
   const formatter = new Intl.NumberFormat("ru-RU", {
     style: "currency",
     currency: "RUB",
     minimumFractionDigits: 1
   })
 
-  return formatter.format(Number(value)).replace(/\s/g, ".").replace(/\.₽/, "₽");
+  return formatter
+    .format(value)
+    .replace(/\s/g, ".")
+    .replace(/\.\u20BD/, "\u20BD");
 }
 
 export function prepareSalary(
@@ -45,4 +52,8 @@ export function prepareTableData(
 
 export function transformData(data: DataRow[]) {
   return data.map((row) => Object.values(row));
+}
+
+export function prepareSkillsGraphicData(data: ISkillsStatistics) {
+  return data.skills.map((skill) => ([skill.skill, skill.count]));
 }

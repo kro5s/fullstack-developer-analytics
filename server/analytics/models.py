@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
 class Skill(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
@@ -12,3 +12,13 @@ class Vacancy(models.Model):
     salary_currency = models.CharField(max_length=3, null=True, blank=True)
     area_name = models.CharField(max_length=255)
     published_at = models.DateTimeField()
+
+    salary = models.FloatField(null=True, blank=True)
+
+class CurrencyExchange(models.Model):
+    currency = models.CharField(max_length=10)
+    exchange_rate = models.FloatField()
+    date = models.DateTimeField()
+
+    class Meta:
+        unique_together = ('currency', 'date')

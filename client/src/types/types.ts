@@ -16,3 +16,13 @@ export interface IVacancy {
   published_at: string;
   link: string;
 }
+
+interface ISkill {
+  skill: string;
+  count: number;
+}
+
+export interface ISkillsStatistics {
+  year: number;
+  skills: ISkill[];
+}

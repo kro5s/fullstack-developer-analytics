@@ -2,14 +2,25 @@ import styles from "./AnalyticsTable.module.css";
 import classNames from "classnames";
 
 interface Props {
-  data: (string | number)[][]
+  data: (string | number)[][];
+  className?: string;
+  columns?: string;
 }
 
-function AnalyticsTable({data}: Props) {
+function AnalyticsTable({data, className, columns}: Props) {
+  const classes = classNames(styles.grid, {
+    [String(className)]: className
+  })
+
   return (
-    <div className={styles.grid} style={{
-      gridTemplateColumns: `repeat(${data[0].length}, max-content)`
-    }}>
+    <div
+      className={classes}
+      style={
+        {
+          gridTemplateColumns: !columns ? `max-content repeat(${data[0].length - 1}, min-content)` : columns
+        }
+      }
+    >
       {
         data[0].map((key, i) => (
           <div
