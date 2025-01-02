@@ -8,9 +8,10 @@ import {useState} from "react";
 
 interface Props {
   data: ISkillsStatistics[];
+  title?: string;
 }
 
-function SkillsStatistics({data}: Props) {
+function SkillsStatistics({data, title = "Все профессии"}: Props) {
   const [currentYear, setCurrentYear] = useState(data.length - 1)
 
   const tableData = data.map(item => {
@@ -22,7 +23,7 @@ function SkillsStatistics({data}: Props) {
 
   return (
     <section className="analytics">
-      <h2 className="title-xl">Самые востребованные навыки по годам: Все профессии</h2>
+      <h2 className="title-xl">Самые востребованные навыки по годам: {title}</h2>
       <div className={styles.container}>
         <AnalyticsBar data={prepareSkillsGraphicData(data[currentYear])} />
 

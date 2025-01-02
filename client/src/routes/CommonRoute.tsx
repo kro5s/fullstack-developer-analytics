@@ -73,7 +73,7 @@ function CommonRoute() {
         </div>
       </section>
       <section className="analytics">
-        <h2 className="title-xl">Уровень зарплат по городам: Все профессии</h2>
+        <h2 className="title-xl">Доля вакансий по городам: Все профессии</h2>
         <div className="analytics-data">
           <AnalyticsTable
             data={
