@@ -1,5 +1,4 @@
 from collections import defaultdict
-
 from django.core.cache import cache
 from django.db.models import Q, Avg, FloatField, Count
 from django.db.models.functions import ExtractYear, Round, Cast
@@ -9,6 +8,15 @@ from rest_framework.views import APIView
 from analytics.models import Vacancy
 
 base_filters = {"salary__isnull": False, "salary__lte": 10_000_000}
+
+fs_names = ['fullstack', 'фулстак', 'фуллcтак', 'фуллстэк', 'фулстэк', 'full stack']
+
+def build_name_filter(names):
+    query = Q()
+    for name in names:
+        query |= Q(name__icontains=name)
+    return query
+
 cache_timeout = 3600 * 24 * 30
 
 def cached_function(key, timeout, func, *args, **kwargs):
@@ -16,8 +24,10 @@ def cached_function(key, timeout, func, *args, **kwargs):
 
 
 def get_salary_year_dynamic(**kwargs):
+    name_filter = build_name_filter(kwargs.pop('name__icontains_list', []))
+
     return (
-        Vacancy.objects.filter(Q(**base_filters, **kwargs))
+        Vacancy.objects.filter(Q(**base_filters, **kwargs) & name_filter)
         .annotate(year=ExtractYear('published_at'))
         .values('year')
         .annotate(salary=Round(Avg('salary', output_field=FloatField()), 1))
@@ -26,8 +36,10 @@ def get_salary_year_dynamic(**kwargs):
 
 
 def get_count_year_dynamic(**kwargs):
+    name_filter = build_name_filter(kwargs.pop('name__icontains_list', []))
+
     return (
-        Vacancy.objects.filter(Q(**kwargs))
+        Vacancy.objects.filter(Q(**kwargs) & name_filter)
         .annotate(year=ExtractYear('published_at'))
         .values('year')
         .annotate(vacancies=Count('id'))
@@ -36,10 +48,11 @@ def get_count_year_dynamic(**kwargs):
 
 
 def get_top_10_salary_city(**kwargs):
-    total_vacancies = Vacancy.objects.filter(Q(**base_filters)).count()
+    name_filter = build_name_filter(kwargs.pop('name__icontains_list', []))
+    total_vacancies = Vacancy.objects.filter(Q(**base_filters) & name_filter).count()
 
     dynamic = (
-        Vacancy.objects.filter(Q(**base_filters, **kwargs))
+        Vacancy.objects.filter(Q(**base_filters, **kwargs) & name_filter)
         .values('area_name')
         .annotate(
             salary=Avg('salary'),
@@ -59,10 +72,11 @@ def get_top_10_salary_city(**kwargs):
 
 
 def get_top_10_vac_city(**kwargs):
-    total_vacancies = Vacancy.objects.count()
+    name_filter = build_name_filter(kwargs.pop('name__icontains_list', []))
+    total_vacancies = Vacancy.objects.filter(name_filter).count()
 
     dynamic = (
-        Vacancy.objects.filter(Q(**kwargs))
+        Vacancy.objects.filter(Q(**kwargs) & name_filter)
         .values('area_name')
         .annotate(
             vacancy_count=Count('id'),
@@ -80,8 +94,10 @@ def get_top_10_vac_city(**kwargs):
 
 
 def get_top_20_year_skills(**kwargs):
+    name_filter = build_name_filter(kwargs.pop('name__icontains_list', []))
     annotated_vacancies = (
         Vacancy.objects
+        .filter(name_filter)
         .annotate(year=ExtractYear('published_at'))
         .values('year', 'key_skills__name')
         .filter(key_skills__name__isnull=False)
@@ -125,14 +141,38 @@ class Common(APIView):
 
 class Relevance(APIView):
     def get(self, request):
-        pass
+        response_data = {
+            "year_salary": cached_function(
+                "year_salary_fs", cache_timeout, get_salary_year_dynamic, name__icontains_list=fs_names
+            ),
+            "year_vacancies": cached_function(
+                "year_vacancies_fs", cache_timeout, get_count_year_dynamic, name__icontains_list=fs_names
+            ),
+        }
+
+        return Response(response_data)
 
 
 class Geography(APIView):
     def get(self, request):
-        pass
+        response_data = {
+            "city_salary": cached_function(
+                "city_salary_fs", cache_timeout, get_top_10_salary_city, name__icontains_list=fs_names
+            ),
+            "city_vacancies_fraction": cached_function(
+                "city_vacancies_fraction_fs", cache_timeout, get_top_10_vac_city, name__icontains_list=fs_names
+            ),
+        }
+
+        return Response(response_data)
 
 
 class Skills(APIView):
     def get(self, request):
-        pass
+        response_data = {
+            "year_skills": cached_function(
+                "year_skills_fs", cache_timeout, get_top_20_year_skills, name__icontains_list=fs_names
+            )
+        }
+
+        return Response(response_data)
