@@ -3,6 +3,8 @@ import {prepareTableData, transformData, transformNumberToCurrency} from "../uti
 import AnalyticsBar from "../components/AnalyticsBar/AnalyticsBar.tsx";
 import AnalyticsPie from "../components/AnalyticsPie/AnalyticsPie.tsx";
 import {useQuery} from "react-query";
+import Loader from "../components/UI/Loader/Loader.tsx";
+import PageNavigation from "../components/PageNavigation/PageNavigation.tsx";
 
 function GeographyRoute() {
   const {
@@ -21,7 +23,7 @@ function GeographyRoute() {
   });
 
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader/>;
   if (isError) return <div>Error occurred, try again...</div>;
 
   return (
@@ -56,6 +58,7 @@ function GeographyRoute() {
           <AnalyticsPie data={transformData(data["city_vacancies_fraction"])}/>
         </div>
       </section>
+      <PageNavigation prev="/relevance" next="/skills" />
     </>
   );
 }

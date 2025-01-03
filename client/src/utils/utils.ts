@@ -1,5 +1,11 @@
 import {ISkillsStatistics} from "../types/types.ts";
 
+const currenciesTranslate: {[key: string]: string} = {
+  "RUR": "₽",
+  "USD": "$",
+  "KZT": "₸",
+}
+
 export function transformNumberToCurrency(value: string | number) {
   if (typeof value === "string") value = 0;
 
@@ -16,17 +22,20 @@ export function transformNumberToCurrency(value: string | number) {
 }
 
 export function prepareSalary(
-  salary_from: number | undefined,
-  salary_to: number | undefined,
+  salary_from?: number | undefined,
+  salary_to?: number | undefined,
+  currency?: string,
 ) {
   const result = [];
 
+  if (currency && currency in currenciesTranslate) currency = currenciesTranslate[currency];
+
   if (salary_from) {
-    result.push(`от ${transformNumberToCurrency(salary_from)}`)
+    result.push(`от ${salary_from}${currency}`)
   }
 
   if (salary_to) {
-    result.push(`до ${transformNumberToCurrency(salary_to)}`)
+    result.push(`до ${salary_to}${currency}`)
   }
 
   return result.join(" ");

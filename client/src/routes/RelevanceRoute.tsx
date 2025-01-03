@@ -2,6 +2,8 @@ import AnalyticsTable from "../components/AnalyticsTable/AnalyticsTable.tsx";
 import {prepareTableData, transformData, transformNumberToCurrency} from "../utils/utils.ts";
 import AnalyticsLine from "../components/AnalyticsLine/AnalyticsLine.tsx";
 import {useQuery} from "react-query";
+import Loader from "../components/UI/Loader/Loader.tsx";
+import PageNavigation from "../components/PageNavigation/PageNavigation.tsx";
 
 function RelevanceRoute() {
   const {
@@ -20,7 +22,7 @@ function RelevanceRoute() {
   });
 
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader/>;
   if (isError) return <div>Error occurred, try again...</div>;
 
   return (
@@ -54,6 +56,7 @@ function RelevanceRoute() {
           <AnalyticsLine data={transformData(data["year_vacancies"]).reverse()}/>
         </div>
       </section>
+      <PageNavigation prev="/common" next="/geography" />
     </>
   );
 }

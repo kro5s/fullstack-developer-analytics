@@ -26,11 +26,22 @@
     font-weight: 500;
 }
 
+.descriptionWrapper {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
 .description {
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
+}
+
+.description * {
+    font-weight: normal;
+    font-style: normal;
 }
 
 .skills {
@@ -52,6 +63,7 @@
 
 .company {
     padding-bottom: 20px;
+    font-weight: 600;
 }
 
 .bottom {

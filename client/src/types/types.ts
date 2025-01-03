@@ -5,16 +5,23 @@ export interface ComponentWithChildren {
 }
 
 export interface IVacancy {
-  id: number;
+  id: string;
   name: string;
-  salary_from?: number;
-  salary_to?: number;
-  description: string;
-  key_skills: string[];
-  company: string;
-  area_name: string;
+  alternate_url: string;
+  salary: {
+    from: number;
+    to: number;
+    currency: string;
+  };
+  employer: {
+    name: string;
+  };
+  area: {
+    name: string;
+  }
   published_at: string;
-  link: string;
+  description: string;
+  key_skills: {name: string}[];
 }
 
 interface ISkill {

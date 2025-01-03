@@ -2,16 +2,8 @@ import styles from "./Navigation.module.css";
 import {useContext} from "react";
 import {NavigationContext} from "../Layout/Layout.tsx";
 import classNames from "classnames";
-import {NavLink} from "react-router-dom";
+import NavigationLinks from "../NavigationLinks/NavigationLinks.tsx";
 
-const links = {
-  "Главная": "/",
-  "Общая статистика": "/common",
-  "Востребованность": "/relevance",
-  "География": "/geography",
-  "Навыки": "/skills",
-  "Последние вакансии": "/latest"
-}
 
 function Navigation() {
   const {isNavigationHidden, setIsNavigationHidden} = useContext(NavigationContext);
@@ -37,23 +29,7 @@ function Navigation() {
                 </svg>
               </button>
             </div>
-            <ul className={styles.links}>
-              {
-                Object.entries(links).map(([title, link], i) => (
-                  <li
-                    key={i}
-                    className={styles.link}
-                  >
-                    <NavLink
-                      to={link}
-                      className={({isActive}) => isActive ? styles.active : undefined}
-                    >
-                      {title}
-                    </NavLink>
-                  </li>
-                ))
-              }
-            </ul>
+            <NavigationLinks />
           </>
           :
           <button onClick={handleNavigationToggle} className={buttonStyles}>

@@ -9,34 +9,47 @@ interface Props {
 function Vacancy({data}: Props) {
   const {
     name,
-    area_name,
-    company,
-    key_skills,
-    salary_from,
-    salary_to,
-    description,
+    alternate_url,
+    salary,
+    employer,
+    area,
     published_at,
-    link
+    description,
+    key_skills
   } = data;
 
+  const date = new Date(published_at);
+
+  const formattedDay = String(date.getDate()).padStart(2, "0");
+  const formattedMonth = String(date.getMonth() + 1).padStart(2, "0");
+  const formattedYear = date.getFullYear();
+
   return (
-    <a href={link} target="_blank">
+    <a href={alternate_url} target="_blank">
       <div className={styles.vacancy}>
         <h3 className="title-l">{name}</h3>
-        <div className={styles.salary}><span>{prepareSalary(salary_from, salary_to)}</span></div>
-        <p className={styles.description}>{description}</p>
+        <div className={styles.salary}>
+          <span>
+            {
+              salary ? prepareSalary(salary.from, salary.to, salary.currency) : "Уровень дохода не указан"
+            }
+          </span>
+        </div>
+        <div className={styles.descriptionWrapper}>
+          <div className={styles.description} dangerouslySetInnerHTML={{__html: description}}></div>
+        </div>
         <ul className={styles.skills}>
           {
             key_skills.map((skill, i) => (
-              <li key={i} className={styles.skill}>{skill}</li>
+              <li key={i} className={styles.skill}>{skill.name}</li>
             ))
           }
         </ul>
-        <div className={styles.company}><span>{company}</span></div>
+        <div className={styles.company}><span>{employer.name}</span></div>
         <div className={styles.bottom}>
-          <span>{area_name}</span>
+          <span>{area.name}</span>
           <div className={styles.divider}></div>
-          <span>{published_at}</span>
+          <span>{formattedDay}.{formattedMonth}.{formattedYear}</span>
         </div>
       </div>
     </a>

@@ -1,0 +1,26 @@
+.links {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.link a {
+    position: relative;
+    color: var(--blue-main);
+}
+
+.link a.active::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+
+    position: absolute;
+    top: 50%;
+    left: -10px;
+
+    transform: translate(-50%, -50%);
+
+    background-color: var(--yellow-accent);
+}

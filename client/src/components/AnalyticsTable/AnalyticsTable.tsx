@@ -17,7 +17,7 @@ function AnalyticsTable({data, className, columns}: Props) {
       className={classes}
       style={
         {
-          gridTemplateColumns: !columns ? `max-content repeat(${data[0].length - 1}, min-content)` : columns
+          gridTemplateColumns: !columns ? `max-content repeat(${data[0].length - 1}, 1fr)` : columns
         }
       }
     >

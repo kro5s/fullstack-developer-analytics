@@ -2,3 +2,14 @@
     flex-grow: 1;
     max-width: 50%;
 }
+
+.graphic canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+@media (max-width: 1023px) {
+    .graphic {
+        max-width: 100%;
+    }
+}
